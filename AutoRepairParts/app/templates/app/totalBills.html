@@ -1,0 +1,64 @@
+{% extends "app/layout.html" %}
+{% block content %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+
+    <div class="container-fluid">
+
+        <!-- DataTables Example -->
+        <div class="card mb-3">
+            <div class="card-header form-row">
+                <span><i class="fas fa-fw fa-money-bill-alt"></i> Total Bills </span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if bills %}
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Invoice No</th>
+                                <th>Customer</th>
+                                <th>Total Amount</th>
+                                <th>Paid</th>
+                                <th>Pending</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Invoice No</th>
+                                <th>Customer</th>
+                                <th>Total Amount</th>
+                                <th>Paid</th>
+                                <th>Pending</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for bill in bills %}
+                            <tr>
+                                <td>{{bill.invoiceNo}}</td>
+                                <td>{{bill.customer.name}}</td>
+                                <td>{{bill.grandTotal}}</td>
+                                <td>{{bill.paid}}</td>
+                                <td>{{bill.balance}}</td>
+                                <td>{% if bill.status == True %} Paid {% else %} Pending {% endif %}</td>
+                                <td>{{bill.date_created|date:"F d, Y"}}</td>
+                                <td><a href="{% url 'invoice' bill.id %}"> View </a></td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+{% endblock %}

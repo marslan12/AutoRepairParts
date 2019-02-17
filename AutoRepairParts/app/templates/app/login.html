@@ -1,50 +1,89 @@
-{% extends "app/layout.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
+  <head>
 
-<h2>{{ title }}</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            <form action="." method="post" class="form-horizontal">
-                {% csrf_token %}
-                <h4>Use a local account to log in.</h4>
-                <hr />
-                <div class="form-group">
-                    <label for="id_username" class="col-md-2 control-label">User name</label>
-                    <div class="col-md-10">
-                        {{ form.username }}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="id_password" class="col-md-2 control-label">Password</label>
-                    <div class="col-md-10">
-                        {{ form.password }}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>UMAR - {{title}}</title>
+
+<!--===============================================================================================-->      
+    <link rel="stylesheet" type="text/css" href="{% static 'app/login/vendor/bootstrap/css/bootstrap.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'app/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'app/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'app/login/vendor/animate/animate.css' %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static 'app/login/vendor/css-hamburgers/hamburgers.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'app/login/vendor/select2/select2.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'app/login/css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'app/login/css/main.css' %}">
+<!--===============================================================================================-->
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('{% static 'app/login/images/umarMushtaq.jpeg' %}');">
+			<div class="wrap-login100">
+				<form action="." method="post">
+                    {% csrf_token %}
+					<div class="login100-form-avatar">
+						<img src="{% static 'app/login/images/watermark.png' %}" alt="AVATAR">
+					</div>
+
+					<span class="login100-form-title p-t-20 p-b-45">
+						Umar Mushtaq Auto Repair
+                        <strong>عمرمشتاق لتصليح السيارات</strong>
+					</span>
+           
+					<div class="wrap-input100 validate-input m-b-10" data-validate = "Username is required">
+                        {% render_field form.username class="input100" placeholder="Username" autocomplete="off" %}
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-user"></i>
+						</span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-10" data-validate = "Password is required">
+                        {% render_field form.password class="input100" placeholder="Password" %}
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock"></i>
+						</span>
+					</div>
+
+					<div class="container-login100-form-btn p-t-10">
                         <input type="hidden" name="next" value="/" />
-                        <input type="submit" value="Log in" class="btn btn-default" />
-                    </div>
-                </div>
-                {% if form.errors %}
-                <p class="validation-summary-errors">Please enter a correct user name and password.</p>
-                {% endif %}
-            </form>
-        </section>
-    </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm"></section>
-    </div>
-</div>
+                        <button type="submit" class="login100-form-btn">Login</button>
+					</div>
+                    {% if form.errors %}
+                        <p style="font-size:15px; color:red;">Please enter a correct user name and password.</p>
+                    {% endif %}
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	
+<!-- Bootstrap core JavaScript-->
+    <script src="{% static 'app/login/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'app/login/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static 'app/login/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'app/login/vendor/select2/select2.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'app/login/js/main.js' %}"></script>
 
-{% endblock %}
-
-
-{% block scripts %}
-
-    {% load staticfiles %}
-<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
-
-{% endblock %}
+</body>
+</html>

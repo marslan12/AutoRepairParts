@@ -1,0 +1,138 @@
+{% extends "app/layout.html" %}
+{% block content %}
+{% load widget_tweaks %}
+    <div class="container-fluid">
+
+        <!-- DataTables Example -->
+        <div class="card mb-3">
+            <div class="card-header form-row">
+                <span><i class="fas fa-fw fa-money-bill-alt"></i> Pending Bills </span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if bills %}
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Invoice No</th>
+                                <th>Customer</th>
+                                <th>Total Amount</th>
+                                <th>Paid</th>
+                                <th>Pending</th>
+                                <th>Date</th>
+                                <th>Due Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Invoice No</th>
+                                <th>Customer</th>
+                                <th>Total Amount</th>
+                                <th>Paid</th>
+                                <th>Pending</th>
+                                <th>Date</th>
+                                <th>Due Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for bill in bills %}
+                            <tr>
+                                <td>{{bill.invoiceNo}}</td>
+                                <td>{{bill.customer.name}}</td>
+                                <td>{{bill.grandTotal}}</td>
+                                <td>{{bill.paid}}</td>
+                                <td>{{bill.balance}}</td>
+                                <td>{{bill.date_created|date:"F d, Y"}}</td>
+                                <td>{{bill.due_date|date:"F d, Y"}}</td>
+                                <td>
+                                    <a href="{% url 'invoice' bill.id %}"> View </a> &nbsp; &nbsp; 
+                                    <a href="" data-toggle="modal" data-target="#editbill{{bill.id}}"> Edit </a> &nbsp; &nbsp;
+                                    <a href="#"> Send Alert </a></td>
+                            </tr>
+                                
+                            <div class="modal fade" id="editbill{{bill.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="card-header"> Edit Bill
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">x</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container">
+                                                <div class="card card-register mx-auto mt-0">
+                                                <div class="card-body">
+                                                    <form action="{% url "updateInvoice" bill.id %}" method="POST">
+                                                    {% csrf_token %}
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <label for="id_grandTotal" class="col-sm-4 control-label">Grand Total</label>
+                                                                <div class="col-sm-8">
+                                                                    <input id="grandTotal" name="grandTotal" class="form-control" value={{bill.grandTotal}} readonly>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <label for="id_paid" class="col-sm-4 control-label">Already Paid</label>
+                                                                <div class="col-sm-8">
+                                                                    <input id="alreadypaid" name="alreadypaid" class="form-control" value={{bill.paid}} readonly>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <label for="id_paid" class="col-sm-4 control-label">Payment</label>
+                                                                <div class="col-sm-8">
+                                                                    <input id="paid" name="paid" type="number" autocomplete="off" class="form-control" onChange="calRemaining()">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <div class="row">
+                                                                <label for="id_balance" class="col-sm-4 control-label">Balance</label>
+                                                                <div class="col-sm-8">
+                                                                    <input id="balance" name="balance" class="form-control" readonly>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <input type="hidden" name="next" value="/" />
+                                                        <div class="text-right">
+                                                            <input value="Submit" type="submit" class="btn btn-primary"/>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+
+<script>
+    function calRemaining()
+	{
+        var gtotal = document.getElementById('grandTotal').value;
+        var alreadypaid = document.getElementById('alreadypaid').value;
+		var paid = document.getElementById('paid').value;
+		var bamount = parseInt(alreadypaid) + parseInt(paid) - parseInt(gtotal);
+		document.getElementById('balance').value = bamount;
+	}
+</script>
+{% endblock %}

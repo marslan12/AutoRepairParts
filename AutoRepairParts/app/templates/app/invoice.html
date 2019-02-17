@@ -1,0 +1,156 @@
+{% extends "app/layout.html" %}
+{% block content %}
+{% load staticfiles %}
+
+<div class="container-fluid">
+    <!-- DataTables Example -->
+    <div class="card mb-3">
+        <div class="card-header form-row">
+            <span><i class="fas fa-fw fa-file-invoice-dollar"></i>Invoice</span>
+            <div class="ml-auto mr-0 mr-md-3 my-2 my-md-0">
+                <a href="" onclick = "printDiv('printableArea')">
+                    <i class="fas fa-print fa-2x"></i>
+                </a>
+            </div>
+        </div>
+
+        <div id="printableArea">
+           <div class="card-body" style = "background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url({% static 'app/images/watermark.png' %}); background-position: center; background-position-y: 90px; background-repeat: no-repeat;">
+             <div class="container">
+                 <div class="row text-center">
+                    <div class="col-lg-12 col-md-12 col-sm-12">           
+                        <strong><h4> Umar Mushtaq Auto Repairs </h4></strong> <br/>
+                        <strong> <h4>Musaffah, Abu Dhabi/AZ </h4></strong> <br/>
+                     </div>
+                 </div>
+                 <div  class="row text-center contact-info">
+                     <div class="col-lg-12 col-md-12 col-sm-12">
+
+                         <hr />
+                         <span>
+                             <strong>Phone: </strong>  0505120476
+                         </span>
+                         <span>
+                             <strong>Email: </strong>  umcauto11@gmail.com
+                         </span>
+                         <span>
+                             <strong>TRN: </strong>  100385980600003
+                         </span>
+                         <hr />
+                     </div>
+                 </div>
+                 <br />
+                 <div  class="row client-info" >
+                     <div class="col-lg-4 col-md-4 col-sm-4">
+                        <b>Invoice No: {{invoice.invoiceNo}}</b><br /><br />
+                        <b>Name :</b> {{customer.name}} <br />
+                        <b>Address :</b> {{customer.address}} <br />
+                        <b>Cell :</b> {{customer.contact}} <br />
+                        <b>Email :</b> {{customer.email}}
+                     </div>
+                     <div class="col-lg-4 col-md-4 col-sm-4">
+                        <b>Status: {% if invoice.status == True %} Paid {% else %} Pending {% endif %}</b><br /><br />
+                        <b>Plate :</b> {{invoice.plate}} <br />
+                        <b>Model :</b> {{invoice.model}} <br />
+                        <b>Color :</b> {{invoice.color}} <br />
+                        <b>Miles :</b> {{invoice.miles}}
+                     </div>
+                     <div class="col-lg-4 col-md-4 col-sm-4">
+                        <b>{{invoice.date_created|date:"F d, Y"}}</b><br /><br />
+                        <b>Motor :</b> {{invoice.motor}} <br />
+                        <b>Year :</b> {{invoice.year}} <br />
+                        <b>A/C :</b> {% if invoice.isAC %} Equiped {% else %} Not Equiped {% endif %}<br />
+                        <b>Transam :</b> {% if invoice.transmission %} Automatic {% else %} Manual {% endif %}
+                     </div>
+                 </div>
+                 <br />
+                 <div class="row">
+                     <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th width="8%">S. No.</th>
+                                        <th>Description</th>
+                                        <th width="10%">Quantity</th>
+                                        <th width="18%">Price</th>
+                                        <th width="25%">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{item.part_name}}</td>
+                                            <td>{{item.quantity}}</td>
+                                            <td>{{item.price}}</td>
+                                            <td>{{item.amount}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                       <td><b>Parts Total :<br />Labour Total :<br/>Tax 5% (Part) :<br/>Total :<br/>Discount :<br />Grand Total :<br />Paid Amount :<br />Pending Amount :</td>
+                                        <td>
+                                             {{invoice.partTotal}} <br />
+                                             {{invoice.labourTotal}} <br />
+                                             {{invoice.taxAmount}} <br />
+                                             {{invoice.totalAmount}} <br />
+                                             {{invoice.discount}}%  <br />
+                                             {{invoice.grandTotal}} <br />
+                                             {{invoice.paid}} <br />
+                                             {{invoice.balance}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                     </div>
+                 </div>
+                  <div class="row">
+                     <div class="col-lg-12 col-md-12 col-sm-12">
+                        <strong> Important: </strong>
+                         <ol>
+                              <li>
+                                This is an electronic generated invoice so doesn't require any signature.
+                             </li>
+                             <li>
+                                 Please read all terms and polices on  www.umarmushtaq.com for returns, replacement and other issues.
+                             </li>
+                         </ol>
+                         </div>
+                     </div>
+             </div>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+<script type="text/javascript">
+    function printDiv1(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+
+    function printDiv(data) {
+      var mywindow = window.open('', 'new div', 'height=720,width=1280');
+      mywindow.document.write('<html><head><title>{{invoice.invoiceNo}}</title>');
+      mywindow.document.write('<link rel="stylesheet" href="{% static 'app/vendor/bootstrap/css/bootstrap.min.css' %}" type="text/css" />');
+      mywindow.document.write('<link rel="stylesheet" href="{% static 'app/css/custom-style.css' %}" type="text/css" />');
+      mywindow.document.write('</head><body >');
+      var printContents = document.getElementById(data).innerHTML;
+      mywindow.document.write(printContents);
+      mywindow.document.write('</body></html>');
+      mywindow.document.close();
+      mywindow.focus();
+      mywindow.print();
+
+      return true;
+    }
+</script>
+{% endblock %}

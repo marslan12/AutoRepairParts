@@ -1,0 +1,53 @@
+{% extends "app/layout.html" %}
+{% block content %}
+{% load widget_tweaks %}
+    <div class="container-fluid">
+
+        <!-- DataTables Example -->
+        <div class="card mb-3">
+            <div class="card-header form-row">
+                <span><i class="fas fa-fw fa-money-bill-alt"></i> Customers </span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    {% if customers %}
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for customer in customers %}
+                            <tr>
+                                <td>{{customer.name}}</td>
+                                <td>{{customer.address}}</td>
+                                <td>{{customer.contact}}</td>
+                                <td>{{customer.email}}</td>
+                                <td><a href="{% url 'customerBills' customer.id %}"> Bills </a></td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+{% endblock %}

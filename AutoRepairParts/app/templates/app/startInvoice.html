@@ -1,0 +1,411 @@
+{% extends "app/layout.html" %}
+{% block content %}
+{% load widget_tweaks %}
+
+<div class="container-fluid">
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="fas fa-file-invoice-dollar"></i> Invoice
+        </div>
+        <div class="card-body table-responsive">
+            <form action="{% url 'startInvoice' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" value="0" name="customerID" id="customerID">
+                <!-- Text input-->
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-2">
+                            {% render_field form1.name class="form-control" placeholder="Name" autocomplete="off" required=true %}
+                        </div>
+                      		
+                        <div class="col-md-2">
+                            {% render_field form1.address class="form-control" placeholder="Address" autocomplete="off" required=true %}
+                        </div>
+
+                        <div class="col-md-2">
+                            {% render_field form1.contact onClick="loadCustSuggestion()" class="form-control" placeholder="Contact" autocomplete="off" required=true %}
+                        </div>
+
+                        <div class="col-md-2">
+                            {% render_field form1.email class="form-control" placeholder="Email" autocomplete="off" %}
+                        </div>
+
+                        <div class="col-md-2">
+                            {% render_field form2.plate class="form-control" placeholder="Plate" autocomplete="off" required=true %}
+                        </div>
+
+                        <div class="col-md-2">
+                            {% render_field form2.model class="form-control" placeholder="Model" autocomplete="off" required=true %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-2">
+                            {% render_field form2.isAC class="form-control" %}
+                        </div>
+                      		
+                        <div class="col-md-2">
+                            {% render_field form2.transmission class="form-control"%}
+                        </div>
+
+                        <div class="col-md-2">
+                            {% render_field form2.color class="form-control" placeholder="Color" autocomplete="off" required=true %}
+                        </div>
+
+                        <div class="col-md-2">
+                            {% render_field form2.miles class="form-control" placeholder="Miles" autocomplete="off" required=true %}
+                        </div>
+
+                        <div class="col-md-2">
+                            {% render_field form2.motor class="form-control" placeholder="Motor" autocomplete="off" required=true %}
+                        </div>
+
+                        <div class="col-md-2">
+                            {% render_field form2.year class="form-control" placeholder="Year" autocomplete="off" required=true %}
+                        </div>
+                    </div>
+                </div>
+                       
+                <table class="table table-bordered table-striped table-hover js-basic-example dataTable tbl_custom" id="itemsTable">
+                    <thead>
+					    <tr>
+						    <th>Sr.No.</th><th>Parts/Labour</th><th>Rate</th><th>Quantity</th><th>Amount</th>
+					    </tr>
+                    </thead>
+                            
+                    <tbody id="table-details">
+                        <tr id="1" class="jdr1">
+                            <td>
+                                <span class="btn btn-sm btn-default">1</span>
+                                <input type="hidden" value="6437" name="count[]">
+                                <input type="hidden" name="itemID[]">
+                                <input type="hidden" name="itemType[]">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm" autocomplete="off" placeholder="Part Name/Labour" name="itemName[]" id=1 onKeyPress="loadSuggestion(this.parentNode.parentNode)" required>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm" name="salePrice[]" onChange="calAmount(this.parentNode.parentNode)" readonly required>
+                            </td>
+                            <td>
+                                <input type="number" class="form-control input-sm" placeholder="Quantity" name="quantity[]" onChange="calAmount(this.parentNode.parentNode)" value="1" required>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm" readonly name="amount[]">
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-circle btn-add-more"><i class="fa fa-plus"></i></button>
+                            <button type="button" class="btn btn-danger btn-circle btn-remove-detail-row"><i class="fa fa-times"></i></button>
+                        </td>
+                        <td></td>
+                        <td> Total : </td>
+                        <td> <input type="text" class="form-control input-sm" name="subTotal" id="subTotal" readonly> </td>
+                    </tr>
+                </table>
+
+                <div class="form-row">
+                    <div class ="col-md-4"></div>
+			        <div class ="col-md-4">
+                        <a href="" onClick="calTotalAmount()" data-toggle="modal" data-target="#confirm" class="btn btn-primary btn-lg btn-block">Proceed</a>
+			        </div>
+                    <div class ="col-md-4"></div>
+                </div>
+
+                <!-- Confirm Modal-->
+                <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="width: 750px; margin: auto; ruby-align:center">
+                      <div class="card-header"> Confirmation
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">x</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                          <div class="container">
+                              <div class="card card-register mx-auto mt-0">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <label for="id_totalAmount" class="col-sm-5 control-label">Parts Total</label>
+                                                    <div class="col-sm-7">
+                                                        {% render_field form2.partTotal class="form-control" readonly=true %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <label for="id_discount" class="col-sm-5 control-label">Discount</label>
+                                                    <div class="col-sm-7">
+                                                        {% render_field form2.discount class="form-control" value="0" onChange="calGrandTotal()" %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <label for="id_totalAmount" class="col-sm-5 control-label">Labour Total</label>
+                                                    <div class="col-sm-7">
+                                                        {% render_field form2.labourTotal class="form-control" readonly=true %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <label for="id_grandTotal" class="col-sm-5 control-label">Grand Total</label>
+                                                    <div class="col-sm-7">
+                                                    {% render_field form2.grandTotal class="form-control" readonly=true %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                     <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <label for="id_totalAmount" class="col-sm-5 control-label">Tax 5% (Parts)</label>
+                                                    <div class="col-sm-7">
+                                                        {% render_field form2.taxAmount class="form-control" readonly=true %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <label for="id_paid" class="col-sm-5 control-label">Payment</label>
+                                                    <div class="col-sm-7">
+                                                    {% render_field form2.paid class="form-control" onChange="calRemaining()" %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                     </div>
+
+                                    <div class="form-row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <label for="id_totalAmount" class="col-sm-5 control-label">Sub Total</label>
+                                                    <div class="col-sm-7">
+                                                    {% render_field form2.totalAmount class="form-control" readonly=true %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <label for="id_balance" class="col-sm-5 control-label">Pending</label>
+                                                    <div class="col-sm-7">
+                                                    {% render_field form2.balance class="form-control" readonly=true %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                     </div>
+
+                                    <div class="form-row">
+                                        <div class ="col-md-3"></div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <label for="id_due_date" class="col-sm-5 control-label">Due Date</label>
+                                                    <div class="col-sm-7">
+                                                    {% render_field form2.due_date class="form-control" placeholder="Select Due Date" autocomplete="off" value="None" %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class ="col-md-3"></div>
+                                     </div>
+
+                                    <div class="form-row">
+                                        <div class ="col-md-3"></div>
+			                            <div class ="col-md-6">
+                                            <input type="hidden" name="next" value="/" />
+                                            <input value="Submit" type="submit" class="btn btn-primary btn-lg btn-block"/>
+                                        </div>
+                                        <div class ="col-md-3"></div>
+                                    </div>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+			</form>
+        </div>
+    </div>
+ </div>
+
+<script>
+    $(function () {
+        $("#id_due_date").val('');
+		$("#id_due_date").datepicker({
+				minDate:0,
+				changeMonth: true,
+				changeYear: true
+        });
+        
+	});
+
+   function calAmount(arg)
+   {
+        var rowid = arg.getAttribute('id');
+	    var s = document.getElementsByName("salePrice[]");
+		var q = document.getElementsByName("quantity[]");
+		var p = document.getElementsByName("amount[]");
+			
+	    p[rowid-1].value = (q[rowid-1].value*s[rowid-1].value);
+
+       var tot = 0;
+       for (var i = 0; i < p.length; i++)
+       {
+           if (parseInt(p[i].value))
+           {
+               tot += parseInt(p[i].value);
+           }
+		}
+		document.getElementById('subTotal').value = tot;
+        //calTotalAmount();
+    }
+
+    function calTotalAmount()
+    {
+        var itemType = document.getElementsByName("itemType[]");
+		var p = document.getElementsByName("amount[]");
+
+        var partTotal = 0;
+        var labourTotal = 0;
+        var taxAmount = 0;
+        var subTotal = 0;
+        var grandTotal = 0;
+
+       for (var i = 0; i < p.length; i++)
+       {
+           if(parseInt(itemType[i].value) == 1)
+               partTotal += parseInt(p[i].value);
+           else
+               labourTotal += parseInt(p[i].value);
+        }
+        taxAmount = (5 / 100) * parseInt(partTotal);
+        subTotal = partTotal + labourTotal + taxAmount;
+
+        document.getElementById('id_partTotal').value = partTotal;
+        document.getElementById('id_labourTotal').value = labourTotal;
+        document.getElementById('id_taxAmount').value = taxAmount;
+        document.getElementById('id_totalAmount').value = subTotal;
+        
+	    var discount = document.getElementById("id_discount").value;
+		
+        grandTotal = subTotal - subTotal * (discount / 100);
+        document.getElementById('id_grandTotal').value = Math.round(grandTotal);
+    }
+
+    function calGrandTotal()
+    {
+        var grandTotal = 0;
+        var subTotal = parseInt(document.getElementById("id_totalAmount").value);
+        var discount = document.getElementById("id_discount").value;
+		
+        grandTotal = subTotal - subTotal * (discount / 100);
+        document.getElementById('id_grandTotal').value = Math.round(grandTotal);
+    }
+
+    function calRemaining()
+    {
+        var pending = 0;
+		var gtotal = parseInt(document.getElementById('id_grandTotal').value);
+        var paid = parseInt(document.getElementById('id_paid').value);
+
+        if (gtotal > paid)
+            pending = gtotal - paid;
+
+		document.getElementById('id_balance').value = pending;
+	}
+
+    function loadSuggestion(arg)
+    {
+        var rowid = arg.getAttribute('id');
+
+        $("input[id=" + rowid + "]").autocomplete({
+            source: "/api/get_parts/",
+            select: function (event, ui) {
+                setValuesInFields(arg, ui.item.id, ui.item.price, ui.item.itemType);
+                calAmount(arg);
+            }
+        });
+    }
+
+    function loadCustSuggestion()
+    {
+        $("input[id=id_contact]").autocomplete({
+            source: "/api/get_customers/",
+            select: function (event, ui) {
+                document.getElementById("customerID").value = ui.item.id;
+                document.getElementById("id_name").value = ui.item.name;
+                document.getElementById("id_address").value = ui.item.address;
+                document.getElementById("id_email").value = ui.item.email;
+            }
+        });
+    }
+
+    function setValuesInFields(arg, id, price, itemType)
+    {
+        var rowid = arg.getAttribute('id');
+        document.getElementsByName("itemID[]")[rowid-1].value = id;
+        document.getElementsByName("salePrice[]")[rowid - 1].value = price;
+        document.getElementsByName("itemType[]")[rowid-1].value = itemType;
+    }
+
+	function cnfrmOrder()
+	{
+		document.getElementById('gtotal').value = document.getElementById('grandTotal').value;
+	}
+    
+	$(document).ready(function ()
+	{
+		$("body").on('click', '.btn-add-more', function (e)
+		{
+			e.preventDefault();
+			var $sr = ($(".jdr1").length + 1);
+			
+			var $html = '<tr class="jdr1" id="' + $sr + '">' +
+					'<td><span class="btn btn-sm btn-default">' + $sr + '</span><input type="hidden" name="count[]" value="'+Math.floor((Math.random() * 10000) + 1)+'"> <input type="hidden" name="itemID[]"><input type="hidden" name="itemType[]"> </td>' +
+					'<td><input type="text" class="form-control input-sm" autocomplete="off" placeholder="Part Name/Labour" name="itemName[]" id='+$sr+' onKeyPress="loadSuggestion(this.parentNode.parentNode)" required></td>' +
+					'<td><input type="text" class="form-control input-sm"" name="salePrice[]" onChange="calAmount(this.parentNode.parentNode)" readonly required>' +
+					'<td><input type="number" class="form-control input-sm" placeholder="Quantity" name="quantity[]" onChange="calAmount(this.parentNode.parentNode)" value="1" required></td>' +
+					'<td><input type="text" class="form-control input-sm" readonly name="amount[]">'+'</td>';
+			$("#table-details").append($html);
+		});
+	
+		
+		$("body").on('click', '.btn-remove-detail-row', function (e) {
+			e.preventDefault();
+			if($("#table-details tr:last-child").attr('id') != '1'){
+				$("#table-details tr:last-child").remove();
+			}
+		});
+	});
+</script>
+
+{% endblock %}
