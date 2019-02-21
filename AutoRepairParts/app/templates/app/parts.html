@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="container">
-                                        <div class="card card-register mx-auto mt-5">
+                                        <div class="card card-register mx-auto mt-0">
                                         <div class="card-body">
                                             <form action="{% url "app:part_edit" part.id %}" method="POST">
                                             {% csrf_token %}
@@ -120,9 +120,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                </div>
                             </div>
                             </div>
                         </div>
@@ -148,7 +145,7 @@
           </div>
           <div class="modal-body">
               <div class="container">
-                  <div class="card card-register mx-auto mt-5">
+                  <div class="card card-register mx-auto mt-0">
                     <div class="card-body">
                       <form action="{% url 'app:part_new' %}" method="POST">
                         {% csrf_token %}
@@ -183,9 +180,6 @@
                     </div>
                   </div>
               </div>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>

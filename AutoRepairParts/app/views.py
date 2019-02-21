@@ -12,15 +12,18 @@ from django.db.models import Sum
 from app.models import Part, Invoice, Customer, InvoiceItems
 from app.forms import PartForm, CustomerForm, InvoiceForm, InvoiceItemsForm
 import xlwt
+from django.core.mail import send_mail
 
 @login_required(login_url='/login/')
 def home(request, template_name='app/index.html'):
     #assert isinstance(request, HttpRequest)
+    #context = {"home_page": "active"} # new info here
     totalBill = Invoice.objects.all().count()
     paidBill = Invoice.objects.filter(status=True).count()
     pendingBill = Invoice.objects.filter(status=False).count()
     parts = Part.objects.filter(itemType=1).count()
     data = {
+        "home": "active",
         'title':'Home',
         'year':datetime.now().year,
         'totalBill': totalBill,
@@ -36,10 +39,12 @@ def startInvoice(request, template_name='app/startInvoice.html'):
     form2 = InvoiceForm(request.POST or None)
     form3 = InvoiceItemsForm()
     data = {
+            "startInvoice": "active",
             'title':'Invoice',
             'year':datetime.now().year,
             'form1': form1,
-            'form2': form2
+            'form2': form2,
+            'form3': form3
            }
 
     if form1.is_valid() and form2.is_valid():
@@ -78,7 +83,10 @@ def startInvoice(request, template_name='app/startInvoice.html'):
 
             if itemType[i] == '1':
                 partObj = get_object_or_404(Part, pk=int(part[i]))
-                partObj.stock = partObj.stock - int(quantity[i])
+                if partObj.stock - int(quantity[i]) > 0:
+                    partObj.stock = partObj.stock - int(quantity[i])
+                else: 
+                    partObj.stock = 0
                 partObj.save()
 
         return redirect('invoice', invoice.id)
@@ -161,6 +169,7 @@ def part_list(request, template_name='app/parts.html'):
     form = PartForm(request.POST or None)
     parts = Part.objects.filter(itemType=1)
     data = {
+            "parts": "active",
             'title':'Parts',
             'year':datetime.now().year,
             'form': form
@@ -201,6 +210,7 @@ def labour_list(request, template_name='app/labour.html'):
     form = PartForm(request.POST or None)
     parts = Part.objects.filter(itemType=2)
     data = {
+            "labours": "active",
             'title':'Labours',
             'year':datetime.now().year,
             'form': form
@@ -238,6 +248,7 @@ def labour_delete(request, pk, template_name='app/labour.html'):
 def customers(request, template_name='app/customer.html'):
     customers = Customer.objects.all()
     data = {
+            "customerDirectory": "active",
             'title':'Customers',
             'year':datetime.now().year
            }
@@ -258,6 +269,7 @@ def customerBills(request, customerID, template_name='app/customerBills.html'):
 def totalBills(request, template_name='app/totalBills.html'):
     bills = Invoice.objects.all().order_by('-date_created')
     data = {
+            "totalBills": "active",
             'title':'Total Bills',
             'year':datetime.now().year
            }
@@ -268,6 +280,7 @@ def totalBills(request, template_name='app/totalBills.html'):
 def paidBills(request, template_name='app/paidBills.html'):
     bills = Invoice.objects.filter(status=True).order_by('-date_created')
     data = {
+            "paidBills": "active",
             'title':'Paid Bills',
             'year':datetime.now().year
            }
@@ -278,6 +291,7 @@ def paidBills(request, template_name='app/paidBills.html'):
 def pendingBills(request, template_name='app/pendingBills.html'):
     bill = Invoice.objects.filter(status=False).order_by('-id')
     data = {
+            "pendingBills": "active",
             'title':'Pending Bills',
             'year':datetime.now().year
            }
@@ -300,6 +314,8 @@ def report(request, template_name='app/billReport.html'):
         pendingAmount = bills.filter(status = False).aggregate(Sum('balance'))['balance__sum'] or 0
 
         data = {
+            'message': True,
+            'report': 'active',
             'title': 'Report',
             'year': datetime.now().year,
             'date': parse_date(date),
@@ -316,6 +332,8 @@ def report(request, template_name='app/billReport.html'):
         bills = []
     
         data = {
+            'message': False,
+            'report': 'active',
             'title':'Report',
             'year':datetime.now().year,
             'bills': bills
@@ -409,3 +427,13 @@ def export_report_csv(request, date):
         
     wb.save(response)
     return response
+
+def sendEmail(request):
+    send_mail(
+        'Subject here',
+        'Here is the message.',
+        'arslanm147@hotmail.com',
+        ['arslanm147@gmail.com'],
+        fail_silently=False,
+    )
+    return redirect('pendingBills')

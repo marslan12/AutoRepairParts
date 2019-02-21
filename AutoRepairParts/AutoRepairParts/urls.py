@@ -45,7 +45,9 @@ urlpatterns = [
     url(r'^labour_create$', app.views.labour_create, name='labour_create'),
     url(r'^labour_update/(?P<pk>\d+)$', app.views.labour_update, name='labour_update'),
     url(r'^labour_delete/(?P<pk>\d+)$', app.views.labour_delete, name='labour_delete'),
+
     url(r'^export/xls/(?P<date>\d{4}-\d{2}-\d{2})/$', app.views.export_report_csv, name='export_report_csv'),
+    url(r'^sendEmail$', app.views.sendEmail, name='sendEmail'),
     
     url(r'^login/$',
         django.contrib.auth.views.login,

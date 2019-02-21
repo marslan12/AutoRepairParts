@@ -58,56 +58,57 @@
 
       <!-- Sidebar -->
       <ul class="sidebar navbar-nav">
-        <li class="nav-item active">
+
+        <li class="nav-item {{ home }}">
           <a class="nav-link" href="{% url 'home' %}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </a>
         </li>
         
-        <li class="nav-item">
+        <li class="nav-item {{ startInvoice }}">
           <a class="nav-link" href="{% url 'startInvoice' %}">
             <i class="fas fa-fw fa-file-invoice-dollar"></i>
             <span>Start Invoice</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ parts }}">
           <a class="nav-link" href="{% url 'app:parts'%}">
             <i class="fas fa-fw fa-truck-pickup"></i>
             <span>Parts</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ labours }}">
           <a class="nav-link" href="{% url 'labours'%}">
             <i class="fas fa-fw fa-dollar-sign"></i>
             <span>Labours</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{totalBills}}">
           <a class="nav-link" href="{% url 'totalBills' %}">
             <i class="fas fa-fw fa-money-bill-alt"></i>
             <span>Total Bills</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ paidBills }}">
           <a class="nav-link" href="{% url 'paidBills' %}">
             <i class="fas fa-fw fa-money-bill-alt"></i>
             <span>Paid Bills</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ pendingBills }}">
           <a class="nav-link" href="{% url 'pendingBills' %}">
             <i class="fas fa-fw fa-money-bill-alt"></i>
             <span>Pending Bills</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ report }}">
           <a class="nav-link" href="{% url 'report' %}">
             <i class="fas fa-fw fa-receipt"></i>
             <span>Monthly Reports</span>
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ customerDirectory }}">
           <a class="nav-link" href="{% url 'customers' %}">
             <i class="fas fa-fw fa-users"></i>
             <span>Customer Directory</span>

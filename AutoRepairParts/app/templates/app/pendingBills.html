@@ -10,7 +10,6 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    {% if bills %}
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
@@ -49,7 +48,8 @@
                                 <td>
                                     <a href="{% url 'invoice' bill.id %}"> View </a> &nbsp; &nbsp; 
                                     <a href="" data-toggle="modal" data-target="#editbill{{bill.id}}"> Edit </a> &nbsp; &nbsp;
-                                    <a href="#"> Send Alert </a></td>
+                                    <a href="{% url 'sendEmail' %}"> Send Alert </a>
+                                </td>
                             </tr>
                                 
                             <div class="modal fade" id="editbill{{bill.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -117,7 +117,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    {% endif %}
                 </div>
             </div>
         </div>
