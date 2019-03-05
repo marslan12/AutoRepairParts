@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from datetime import datetime
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Part(models.Model):
     part_no = models.CharField(max_length=200)
@@ -25,7 +25,7 @@ class Invoice(models.Model):
     customer = models.ForeignKey(Customer, null=True)
     plate = models.CharField(max_length=20)
     model = models.CharField(max_length=20)
-    AC_CHOICES = ((True, 'AC'), (False, 'No AC'))
+    AC_CHOICES = ((True, 'AC'), (False, 'Non AC'))
     isAC = models.BooleanField(choices=AC_CHOICES, default='AC')
     Tran_CHOICES = ((True, 'Automatic'), (False, 'Manual'))
     transmission = models.BooleanField(choices=Tran_CHOICES, default='Automatic')
@@ -37,7 +37,7 @@ class Invoice(models.Model):
     labourTotal = models.PositiveIntegerField(default = 0)
     taxAmount = models.DecimalField(default = 0, max_digits=10, decimal_places=2)
     totalAmount = models.DecimalField(default = 0, validators=[MinValueValidator(0)], max_digits=10, decimal_places=2)
-    discount = models.DecimalField(default = 0, validators=[MinValueValidator(0)], max_digits=4, decimal_places=2)
+    discount = models.PositiveIntegerField(default = 0, validators=[MaxValueValidator(100)])
     grandTotal = models.PositiveIntegerField()
     paid = models.PositiveIntegerField()
     balance = models.IntegerField()

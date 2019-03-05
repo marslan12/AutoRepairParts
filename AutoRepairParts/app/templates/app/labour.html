@@ -7,8 +7,8 @@
         <div class="card-header form-row">
             <span><i class="fas fa-fw fa-dollar-sign"></i> Labours </span>
             <div class="ml-auto mr-0 mr-md-3 my-2 my-md-0">
-                <a href="" data-toggle="modal" data-target="#addpart">
-                    <i class="fas fa-plus-square fa-2x"></i>
+                <a href="" data-toggle="modal" data-target="#addpart" class="btn btn-primary add-btn btn-sm">
+                    <i class="fa fa-plus"></i> Add New
                 </a>
             </div>
         </div>
@@ -19,8 +19,8 @@
                     <thead>
                         <tr>
                             <th>Labour Name</th>
-                            <th>Price</th>
-                            <th>Action</th>
+                            <th width="8%">Price</th>
+                            <th width="16%">Action</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -36,11 +36,11 @@
                             <td>{{part.part_name}}</td>
                             <td>{{part.price}}</td>
                             <td>
-                                <a href="" data-toggle="modal" data-target="#editpart{{part.id}}">
-                                    <i class="fas fa-edit"></i>
-                                </a> &nbsp;&nbsp;
-                                <a href="" data-toggle="modal" data-target="#delete{{part.id}}">
-                                    <i class="fas fa-trash-alt"></i>
+                                <a href="" data-toggle="modal" data-target="#editpart{{part.id}}" class="btn btn-success btn-sm">
+                                    <i class="fas fa-pencil-alt"></i> Edit
+                                </a>
+                                <a href="" data-toggle="modal" data-target="#delete{{part.id}}" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash-alt"></i> Delete
                                 </a>
                             </td>
                         </tr>
@@ -48,22 +48,22 @@
                         <!-- Delete Modal-->
                         <div class="modal fade" id="delete{{part.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Ready to Delete?</h5>
-                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
+                                <div class="modal-content">
+                                    <div class="card-header">
+                                    <strong>Ready to Delete?</strong>
+                                     <a href="" class="close btn btn-danger btn-sm" data-dismiss="modal">
+                                        <i class="fas fa-times"></i>
+                                    </a>
                                 </div> 
-                                <div class="modal-body">Are you sure you want to delete this item?</div>
-                                <div class="modal-footer">
-                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                <form action="{% url 'labour_delete' part.id %}" method="POST">
-                                    {% csrf_token %}
-                                    <input type="submit" value="Delete" class="btn btn-primary" href=""/>
-                                </form>
+                                <div class="modal-body"><h5>Are you sure you want to delete this item?</h5></div>
+                                    <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                    <form action="{% url 'labour_delete' part.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <input type="submit" value="Delete" class="btn btn-primary" href=""/>
+                                    </form>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                         </div>
 
@@ -71,10 +71,10 @@
                         <div class="modal fade" id="editpart{{part.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                             <div class="modal-content">
-                                <div class="card-header"> Update Labour
-                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
+                                <div class="card-header"><strong>Update Labour</strong>
+                                    <a href="" class="close btn btn-danger btn-sm" data-dismiss="modal">
+                                        <i class="fas fa-times"></i>
+                                    </a>
                                 </div>
                                 <div class="modal-body">
                                     <div class="container">
@@ -85,19 +85,25 @@
                                                     {% render_field form.itemType value=2 type="hidden" %}
                                                     {% render_field form.part_no value=0 type="hidden" %}
                                                     <div class="form-group">
-                                                        <div class="form-label-group">
-                                                        {% render_field form.part_name class="form-control" value=part.part_name%}
-                                                        <label for="id_part_name">Labour Name</label>
+                                                        <div class="row">
+                                                            <label for="id_part_name" class="col-sm-3 control-label">Name</label>
+                                                            <div class="col-sm-9">
+                                                                {% render_field form.part_name class="form-control" value=part.part_name%}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <div class="form-label-group">
-                                                        {% render_field form.price class="form-control" value=part.price%}
-                                                        <label for="id_price">Price</label>
+                                                        <div class="row">
+                                                            <label for="id_price" class="col-sm-3 control-label">Price</label>
+                                                            <div class="col-sm-9">
+                                                                {% render_field form.price class="form-control" value=part.price%}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <input type="hidden" name="next" value="/" />
-                                                    <input value="Submit" type="submit" class="btn btn-primary btn-block"/>
+                                                    <div class="text-right">
+                                                        <input value="Submit" type="submit" class="btn btn-primary"/>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>
@@ -121,10 +127,10 @@
     <div class="modal fade" id="addpart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="card-header"> Add New Labour
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
+          <div class="card-header"><strong>Add New Labour</strong>
+            <a href="" class="close btn btn-danger btn-sm" data-dismiss="modal">
+                <i class="fas fa-times"></i>
+            </a>
           </div>
           <div class="modal-body">
               <div class="container">
@@ -135,19 +141,25 @@
                         {% render_field form.itemType value=2 type="hidden" %}
                         {% render_field form.part_no value=0 type="hidden" %}
                         <div class="form-group">
-                          <div class="form-label-group">
-                            {% render_field form.part_name class="form-control" %}
-                            <label for="id_part_name">Labour Name</label>
+                          <div class="row">
+                              <label for="id_part_name" class="col-sm-3 control-label">Name</label>
+                              <div class="col-sm-9">
+                                 {% render_field form.part_name class="form-control" %}
+                              </div>
                           </div>
                         </div>
                         <div class="form-group">
-                          <div class="form-label-group">
-                            {% render_field form.price class="form-control" %}
-                            <label for="id_price">Price</label>
+                          <div class="row">
+                              <label for="id_price" class="col-sm-3 control-label">Price</label>
+                              <div class="col-sm-9">
+                                 {% render_field form.price class="form-control" %}
+                              </div>
                           </div>
                         </div>
                         <input type="hidden" name="next" value="/" />
-                        <input value="Submit" type="submit" class="btn btn-primary btn-block"/>
+                        <div class="text-right">
+                            <input value="Submit" type="submit" class="btn btn-primary"/>
+                        </div>
                       </form>
                     </div>
                   </div>

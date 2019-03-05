@@ -9,7 +9,7 @@
         <!-- DataTables Example -->
         <div class="card mb-3">
             <div class="card-header form-row">
-                <span><i class="fas fa-fw fa-money-bill-alt"></i>Bills Report</span>             
+                <span><i class="fas fa-fw fa-receipt"></i> Monthly Report</span>             
             </div>
 
             <div class="card-body">
@@ -17,12 +17,22 @@
                     {% csrf_token %}
                     <div class="form-group">
                         <div class="form-row">
-                            <div class="col-xs-2">
+                            <div class="col-sm-2">
                                 <input id="selectedMonth" name="selectedMonth" class="form-control monthpicker" placeholder="Select Month" autocomplete="off" required>
                             </div>
 
-                            <div class="col-xs-2">
-                                <input value="Submit" type="submit" class="btn btn-primary btn-block"/>
+                            <div class="col-sm-2">
+                                <input value="Submit" type="submit" class="btn btn-primary"/>
+                            </div>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-2">
+                                {% if bills %}
+                                    <a href="{% url 'export_report_csv' date %}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-fw fa-file-excel"></i> Download
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -30,25 +40,21 @@
 
                 {% if bills %}
                     <div  class="row" >
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-3 col-md-3 col-sm-3">
                             <b>Total Bils: {{total}}</b> <br />
                             Paid Bills: {{paid}} <br />
                             Pending Bills: {{pending}}
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-3 col-md-3 col-sm-3">
                             <b>Month: {{date|date:"F, Y"}}</b><br />
                             Paid Amount: {{paidAmount}} <br />
                             Pending Amount: {{pendingAmount}} <br /> <br />
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-3 col-md-3 col-sm-3">
                             <b>Total Tax: {{tax}} </b><br />
                         </div>
 
-                        <div class="ml-auto mr-0 mr-md-3 my-2 my-md-0">
-                            <a href="{% url 'export_report_csv' date %}">
-                                <i class="fas fa-fw fa-file-excel fa-2x"></i>
-                            </a>
-                        </div>
+                        
                     </div>
                 
                     <div class="table-responsive">
@@ -62,7 +68,7 @@
                                     <th>Pending</th>
                                     <th>Status</th>
                                     <th>Date</th>
-                                    <th>Action</th>
+                                    <th>Invoice</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -74,7 +80,7 @@
                                     <th>Pending</th>
                                     <th>Status</th>
                                     <th>Date</th>
-                                    <th>Action</th>
+                                    <th>Invoice</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -86,8 +92,12 @@
                                     <td>{{bill.paid}}</td>
                                     <td>{{bill.balance}}</td>
                                     <td>{% if bill.status == True %} Paid {% else %} Pending {% endif %}</td>
-                                    <td>{{bill.date_created|date:"F d, Y"}}</td>
-                                    <td><a href="{% url 'invoice' bill.id %}"> View </a></td>
+                                    <td>{{bill.date_created|date:"d-m-y"}}</td>
+                                    <td>
+                                        <a href="{% url 'invoice' bill.id %}" class="btn btn-info btn-sm">
+                                            <i class="fas fa-file-invoice-dollar"></i> Invoice
+                                        </a>
+                                    </td>
                                 </tr>
 
                                 {% endfor %}

@@ -67,27 +67,27 @@
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col-md-2">
-                            {% render_field form1.name class="form-control" placeholder="Name" autocomplete="off" %}
+                            {% render_field form1.name class="form-control form-control-sm" placeholder="Name" autocomplete="off" %}
                         </div>
                       		
                         <div class="col-md-2">
-                            {% render_field form1.address class="form-control" placeholder="Address" autocomplete="off" %}
+                            {% render_field form1.address class="form-control form-control-sm" placeholder="Address" autocomplete="off" %}
                         </div>
 
                         <div class="col-md-2">
-                            {% render_field form1.contact onClick="loadCustSuggestion()" class="form-control" placeholder="Contact" autocomplete="off" %}
+                            {% render_field form1.contact onClick="loadCustSuggestion()" class="form-control form-control-sm" placeholder="Contact" autocomplete="off" %}
                         </div>
 
                         <div class="col-md-2">
-                            {% render_field form1.email class="form-control" placeholder="Email" autocomplete="off" %}
+                            {% render_field form1.email class="form-control form-control-sm" placeholder="Email" autocomplete="off" %}
                         </div>
 
                         <div class="col-md-2">
-                            {% render_field form2.plate class="form-control" placeholder="Plate" autocomplete="off" %}
+                            {% render_field form2.plate class="form-control form-control-sm" placeholder="Plate" autocomplete="off" %}
                         </div>
 
                         <div class="col-md-2">
-                            {% render_field form2.model class="form-control" placeholder="Model" autocomplete="off" %}
+                            {% render_field form2.model class="form-control form-control-sm" placeholder="Model" autocomplete="off" %}
                         </div>
                     </div>
                 </div>
@@ -95,27 +95,27 @@
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col-md-2">
-                            {% render_field form2.isAC class="form-control" %}
+                            {% render_field form2.isAC class="form-control form-control-sm" %}
                         </div>
                       		
                         <div class="col-md-2">
-                            {% render_field form2.transmission class="form-control"%}
+                            {% render_field form2.transmission class="form-control form-control-sm"%}
                         </div>
 
                         <div class="col-md-2">
-                            {% render_field form2.color class="form-control" placeholder="Color" autocomplete="off" %}
+                            {% render_field form2.color class="form-control form-control-sm" placeholder="Color" autocomplete="off" %}
                         </div>
 
                         <div class="col-md-2">
-                            {% render_field form2.miles class="form-control" placeholder="Miles" autocomplete="off" %}
+                            {% render_field form2.miles class="form-control form-control-sm" placeholder="Miles" autocomplete="off" %}
                         </div>
 
                         <div class="col-md-2">
-                            {% render_field form2.motor class="form-control" placeholder="Motor" autocomplete="off" %}
+                            {% render_field form2.motor class="form-control form-control-sm" placeholder="Motor" autocomplete="off" %}
                         </div>
 
                         <div class="col-md-2">
-                            {% render_field form2.year class="form-control" placeholder="Year" autocomplete="off" %}
+                            {% render_field form2.year class="form-control form-control-sm" placeholder="Year" autocomplete="off" %}
                         </div>
                     </div>
                 </div>
@@ -128,47 +128,52 @@
                             <th width="12%">Rate</th>
                             <th width="12%">Quantity</th>
                             <th width="12%">Amount</th>
+                            <th width="7%">Remove</th>
 					    </tr>
                     </thead>
                             
                     <tbody id="table-details">
-                        <tr id="1" class="jdr1">
-                            <td>
-                                <span class="btn btn-sm btn-default">1</span>
-                                <input type="hidden" value="6437" name="count[]">
+                        <tr class="jdr1">
+                            <td align="center">
+                                <span class="sn">1</span>
                                 <input type="hidden" name="itemID[]">
                                 <input type="hidden" name="itemType[]">
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" autocomplete="off" placeholder="Part Name/Labour" name="itemName[]" id=1 onKeyPress="loadSuggestion(this.parentNode.parentNode)" required>
+                                <input type="text" class="form-control form-control-sm" name="itemName[]" placeholder="Part Name/Labour" autocomplete="off" onKeyPress="loadSuggestion(this, this.parentNode.parentNode)" required>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" name="salePrice[]" readonly required>
+                                <input type="text" class="form-control form-control-sm" name="salePrice[]" readonly required>
                             </td>
                             <td>
-                                <input type="number" class="form-control input-sm" placeholder="Quantity" name="quantity[]" onChange="calAmount(this.parentNode.parentNode)" value="1" min="1" required>
+                                <input type="number" class="form-control form-control-sm" name="quantity[]" placeholder="Quantity" onChange="calAmount(this.parentNode.parentNode)" value="1" min="1" required>
                             </td>
                             <td>
-                                <input type="text" class="form-control input-sm" readonly name="amount[]">
+                                <input type="text" class="form-control form-control-sm" name="amount[]" readonly>
+                            </td>
+                            <td align="center">
+                                <button type="button" class="btn btn-danger remove-btn btn-sm"><i class="fa fa-minus"></i></button>
                             </td>
                         </tr>
                     </tbody>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <button type="button" class="btn btn-info btn-circle btn-add-more"><i class="fa fa-plus"></i></button>
-                            <button type="button" class="btn btn-danger btn-circle btn-remove-detail-row"><i class="fa fa-times"></i></button>
-                        </td>
-                        <td></td>
-                        <td> Total : </td>
-                        <td> <input type="text" class="form-control input-sm" name="subTotal" id="subTotal" readonly> </td>
-                    </tr>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th>
+                                <a href="" class="btn btn-success add-btn btn-sm"><i class="fa fa-plus"></i> Add Row</a>
+                            </th>
+                            <th></th>
+                            <th> Total : </th>
+                            <th> <input type="text" class="form-control form-control-sm" name="subTotal" id="subTotal" readonly> </th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
                 </table>
-
+               
                 <div class="form-row">
                     <div class ="col-md-4"></div>
 			        <div class ="col-md-4">
-                        <a href="" onClick="calTotalAmount()" data-toggle="modal" data-target="#confirm" class="btn btn-primary btn-lg btn-block">Proceed</a>
+                        <a href="" onClick="ConfirmBtnClick()" data-toggle="modal" data-target="#confirm" class="btn btn-primary btn-block">Proceed</a>
 			        </div>
                     <div class ="col-md-4"></div>
                 </div>
@@ -177,10 +182,10 @@
                 <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content" style="width: 650px; margin: auto; ruby-align:center">
-                      <div class="card-header"> Confirmation
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">x</span>
-                        </button>
+                      <div class="card-header"> <strong>Payment</strong>
+                         <a href="" class="close btn btn-danger btn-sm" data-dismiss="modal">
+                            <i class="fas fa-times"></i>
+                        </a>
                       </div>
                       <div class="modal-body">
                           <div class="container">
@@ -192,7 +197,7 @@
                                                 <div class="row">
                                                     <label for="id_totalAmount" class="col-sm-5 control-label">Parts Total</label>
                                                     <div class="col-sm-5">
-                                                        {% render_field form2.partTotal class="form-control" readonly=true %}
+                                                        {% render_field form2.partTotal class="form-control form-control-sm" readonly=true %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -202,7 +207,7 @@
                                                 <div class="row">
                                                     <label for="id_discount" class="col-sm-5 control-label">Discount (%)</label>
                                                     <div class="col-sm-5">
-                                                        {% render_field form2.discount class="form-control" onChange="calGrandTotal()" %}
+                                                        {% render_field form2.discount class="form-control form-control-sm" onChange="calGrandTotal()" %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -215,7 +220,7 @@
                                                 <div class="row">
                                                     <label for="id_totalAmount" class="col-sm-5 control-label">Labour Total</label>
                                                     <div class="col-sm-5">
-                                                        {% render_field form2.labourTotal class="form-control" readonly=true %}
+                                                        {% render_field form2.labourTotal class="form-control form-control-sm" readonly=true %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -225,7 +230,7 @@
                                                 <div class="row">
                                                     <label for="id_grandTotal" class="col-sm-5 control-label">Grand Total</label>
                                                     <div class="col-sm-5">
-                                                    {% render_field form2.grandTotal class="form-control" readonly=true %}
+                                                    {% render_field form2.grandTotal class="form-control form-control-sm" readonly=true %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -238,7 +243,7 @@
                                                 <div class="row">
                                                     <label for="id_totalAmount" class="col-sm-5 control-label">Tax 5% (Parts)</label>
                                                     <div class="col-sm-5">
-                                                        {% render_field form2.taxAmount class="form-control" readonly=true %}
+                                                        {% render_field form2.taxAmount class="form-control form-control-sm" readonly=true %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -248,7 +253,7 @@
                                                 <div class="row">
                                                     <label for="id_paid" class="col-sm-5 control-label">Payment</label>
                                                     <div class="col-sm-5">
-                                                    {% render_field form2.paid class="form-control" onChange="calRemaining()" %}
+                                                    {% render_field form2.paid class="form-control form-control-sm" onChange="calRemaining()" %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -261,7 +266,7 @@
                                                 <div class="row">
                                                     <label for="id_totalAmount" class="col-sm-5 control-label">Sub Total</label>
                                                     <div class="col-sm-5">
-                                                    {% render_field form2.totalAmount class="form-control" readonly=true %}
+                                                    {% render_field form2.totalAmount class="form-control form-control-sm" readonly=true %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -271,7 +276,7 @@
                                                 <div class="row">
                                                     <label for="id_balance" class="col-sm-5 control-label">Pending</label>
                                                     <div class="col-sm-5">
-                                                    {% render_field form2.balance class="form-control" readonly=true %}
+                                                    {% render_field form2.balance class="form-control form-control-sm" readonly=true %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -285,7 +290,7 @@
                                                 <div class="row">
                                                     <label for="id_due_date" class="col-sm-5 control-label">Due Date</label>
                                                     <div class="col-sm-6">
-                                                    {% render_field form2.due_date class="form-control" placeholder="Select Due Date" autocomplete="off" %}
+                                                    {% render_field form2.due_date class="form-control form-control-sm" placeholder="Select Due Date" autocomplete="off" %}
                                                     </div>
                                                 </div>
                                             </div>
@@ -297,7 +302,7 @@
                                         <div class ="col-md-3"></div>
 			                            <div class ="col-md-6">
                                             <input type="hidden" name="next" value="/" />
-                                            <input value="Submit" type="submit" class="btn btn-primary btn-lg btn-block"/>
+                                            <input value="Submit" type="submit" class="btn btn-primary btn-block"/>
                                         </div>
                                         <div class ="col-md-3"></div>
                                     </div>
@@ -327,33 +332,32 @@
 
    function calAmount(arg)
    {
-        var rowid = arg.getAttribute('id');
+        var rowid = arg.rowIndex;
 	    var s = document.getElementsByName("salePrice[]");
-		var q = document.getElementsByName("quantity[]");
+	    var q = document.getElementsByName("quantity[]");
 		var p = document.getElementsByName("amount[]");
 			
 	    p[rowid-1].value = (q[rowid-1].value*s[rowid-1].value);
 
-       var tot = 0;
-       for (var i = 0; i < p.length; i++)
-       {
+       calTotalAmount();
+    }
+
+    function calTotalAmount()
+    {
+        var p = document.getElementsByName("amount[]");
+        var tot = 0;
+        for (var i = 0; i < p.length; i++)
+        {
            if (parseInt(p[i].value))
            {
                tot += parseInt(p[i].value);
            }
 		}
 		document.getElementById('subTotal').value = tot;
-        //calTotalAmount();
     }
 
-    function calTotalAmount()
+    function ConfirmBtnClick()
     {
-        //var f = document.getElementById('id_name');
-        //if (f.checkValidity() == false)
-        //{
-        //    alert(document.getElementById('id_name').validationMessage);
-        //}
-
         var itemType = document.getElementsByName("itemType[]");
 		var p = document.getElementsByName("amount[]");
 
@@ -406,17 +410,16 @@
 		document.getElementById('id_balance').value = pending;
 	}
 
-    function loadSuggestion(arg)
+    function loadSuggestion(arg, arg1)
     {
-        setValuesInFields(arg, '', '', '');
-        calAmount(arg);
-        var rowid = arg.getAttribute('id');
-
-        $("input[id=" + rowid + "]").autocomplete({
+        setValuesInFields(arg1, '', '', '');
+        calAmount(arg1);
+        
+        $(arg).autocomplete({
             source: "/api/get_parts/",
             select: function (event, ui) {
-                setValuesInFields(arg, ui.item.id, ui.item.price, ui.item.itemType);
-                calAmount(arg);
+                setValuesInFields(arg1, ui.item.id, ui.item.price, ui.item.itemType);
+                calAmount(arg1);
             }
         });
     }
@@ -436,7 +439,7 @@
 
     function setValuesInFields(arg, id, price, itemType)
     {
-        var rowid = arg.getAttribute('id');
+        var rowid = arg.rowIndex;
         document.getElementsByName("itemID[]")[rowid-1].value = id;
         document.getElementsByName("salePrice[]")[rowid - 1].value = price;
         document.getElementsByName("itemType[]")[rowid-1].value = itemType;
@@ -449,27 +452,37 @@
     
 	$(document).ready(function ()
 	{
-		$("body").on('click', '.btn-add-more', function (e)
+		$("body").on('click', '.add-btn', function (e)
 		{
 			e.preventDefault();
-			var $sr = ($(".jdr1").length + 1);
+			var $sr = ($(".jdr1").length+1);
 			
-			var $html = '<tr class="jdr1" id="' + $sr + '">' +
-					'<td><span class="btn btn-sm btn-default">' + $sr + '</span><input type="hidden" name="count[]" value="'+Math.floor((Math.random() * 10000) + 1)+'"> <input type="hidden" name="itemID[]"><input type="hidden" name="itemType[]"> </td>' +
-					'<td><input type="text" class="form-control input-sm" autocomplete="off" placeholder="Part Name/Labour" name="itemName[]" id='+$sr+' onKeyPress="loadSuggestion(this.parentNode.parentNode)" required></td>' +
-					'<td><input type="text" class="form-control input-sm"" name="salePrice[]" onChange="calAmount(this.parentNode.parentNode)" readonly required>' +
-					'<td><input type="number" class="form-control input-sm" placeholder="Quantity" name="quantity[]" onChange="calAmount(this.parentNode.parentNode)" value="1" required></td>' +
-					'<td><input type="text" class="form-control input-sm" readonly name="amount[]">'+'</td>';
+            var $html =
+                '<tr class="jdr1">' +
+			        '<td align="center"><span class="sn">' + $sr + '</span><input type="hidden" name="itemID[]"><input type="hidden" name="itemType[]"> </td>' +
+			        '<td><input type="text" class="form-control form-control-sm" name="itemName[]" autocomplete="off" placeholder="Part Name/Labour" onKeyPress="loadSuggestion(this, this.parentNode.parentNode)" required></td>' +
+			        '<td><input type="text" class="form-control form-control-sm" name="salePrice[]" readonly required>' +
+			        '<td><input type="number" class="form-control form-control-sm" name="quantity[]" placeholder="Quantity" onChange="calAmount(this.parentNode.parentNode)" value="1" min="1" required>' +
+                    '<td><input type="text" class="form-control form-control-sm" name="amount[]" readonly>' +
+                    '<td align="center"><button type="button" class="btn btn-danger remove-btn btn-sm"><i class="fa fa-minus"></i></button></td>' + 
+                '</tr>';
 			$("#table-details").append($html);
 		});
-	
-		
-		$("body").on('click', '.btn-remove-detail-row', function (e) {
-			e.preventDefault();
-			if($("#table-details tr:last-child").attr('id') != '1'){
-				$("#table-details tr:last-child").remove();
-			}
-		});
+
+        $('#table-details').on('click', '.remove-btn', function ()
+        {
+            if ($('#table-details tr').length > 1)
+            {
+                $(this).closest('tr').remove();
+
+                $('#table-details tr').each(function (index)
+                {
+                    $(this).find('span.sn').html(index + 1);
+                });
+
+                calTotalAmount();
+            }
+        });
 	});
 </script>
 

@@ -36,8 +36,12 @@
                                 <td>{{bill.invoiceNo}}</td>
                                 <td>{{bill.customer.name}}</td>
                                 <td>{{bill.grandTotal}}</td>
-                                <td>{{bill.date_created|date:"F d, Y"}}</td>
-                                <td><a href="{% url 'invoice' bill.id %}"> View </a></td>
+                                <td>{{bill.date_created|date:"d-m-y"}}</td>
+                                <td>
+                                    <a href="{% url 'invoice' bill.id %}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-file-invoice-dollar"></i> Invoice
+                                    </a>
+                                </td>
                             </tr>
 
                             {% endfor %}

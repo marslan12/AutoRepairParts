@@ -8,19 +8,20 @@
         <div class="card-header form-row">
             <span><i class="fas fa-fw fa-file-invoice-dollar"></i>Invoice</span>
             <div class="ml-auto mr-0 mr-md-3 my-2 my-md-0">
-                <a href="" onclick = "printDiv('printableArea')">
-                    <i class="fas fa-print fa-2x"></i>
+                <a href="" class="btn btn-success add-btn" onclick = "printDiv('printableArea')">
+                    <i class="fas fa-print"></i> Print
                 </a>
             </div>
         </div>
+
 
         <div id="printableArea">
            <div class="card-body" style = "background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url({% static 'app/images/watermark.png' %}); background-position: center; background-position-y: 90px; background-repeat: no-repeat;">
              <div class="container">
                  <div class="row text-center">
                     <div class="col-lg-12 col-md-12 col-sm-12">           
-                        <strong><h4> Umar Mushtaq Auto Repairs </h4></strong> <br/>
-                        <strong> <h4>Musaffah, Abu Dhabi/AZ </h4></strong> <br/>
+                        <strong><h4> Umar Mushtaq Auto Repairs </h4></strong>
+                        <strong><h4>Musaffah, Abu Dhabi/AZ </h4></strong> <br />
                      </div>
                  </div>
                  <div  class="row text-center contact-info">

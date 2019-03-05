@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django import forms
 from django.http import HttpRequest, HttpResponse
 from django.template import RequestContext
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.views.generic.list import ListView
 import json
@@ -18,6 +18,11 @@ from django.core.mail import send_mail
 def home(request, template_name='app/index.html'):
     #assert isinstance(request, HttpRequest)
     #context = {"home_page": "active"} # new info here
+
+    today = datetime.today()
+    long_ago = today + timedelta(days=-365)
+    #monthlySale = Invoice.objects.filter(date_created__gte=long_ago).annotate(month = date_created_month).values('month')
+
     totalBill = Invoice.objects.all().count()
     paidBill = Invoice.objects.filter(status=True).count()
     pendingBill = Invoice.objects.filter(status=False).count()
@@ -29,7 +34,8 @@ def home(request, template_name='app/index.html'):
         'totalBill': totalBill,
         'paidBill': paidBill,
         'pendingBill': pendingBill,
-        'parts': parts
+        'parts': parts,
+        #'monthlySale': monthlySale
     }
     return render(request, template_name, data)
 
@@ -92,24 +98,6 @@ def startInvoice(request, template_name='app/startInvoice.html'):
         return redirect('invoice', invoice.id)
 
     return render(request, template_name, data)
-
-@login_required(login_url='/login/')
-def updateInvoice(request, pk):
-    invoice = get_object_or_404(Invoice, pk=pk)
-    grandTotal = request.POST.get('grandTotal')
-    alreadypaid = request.POST.get('alreadypaid')
-    paid = request.POST.get('paid')
-    balance = request.POST.get('balance')
-
-    if int(balance) >= 0:
-        invoice.status = True
-
-    invoice.paid = int(alreadypaid) + int(paid)
-    invoice.balance = balance
-    invoice.date_modified = datetime.now()
-    invoice.save()
-
-    return redirect('pendingBills')
 
 def get_parts(request):
     if request.is_ajax():
@@ -289,7 +277,7 @@ def paidBills(request, template_name='app/paidBills.html'):
 
 @login_required(login_url='/login/')
 def pendingBills(request, template_name='app/pendingBills.html'):
-    bill = Invoice.objects.filter(status=False).order_by('-id')
+    bill = Invoice.objects.filter(status=False)
     data = {
             "pendingBills": "active",
             'title':'Pending Bills',
@@ -297,6 +285,22 @@ def pendingBills(request, template_name='app/pendingBills.html'):
            }
     data['bills'] = bill
     return render(request, template_name, data)
+
+@login_required(login_url='/login/')
+def updateInvoice(request, pk):
+    invoice = get_object_or_404(Invoice, pk=pk)
+    paid = request.POST.get('paid')
+    #balance = request.POST.get('balance')
+
+    invoice.paid = invoice.paid + int(paid)
+    invoice.balance = invoice.grandTotal - invoice.paid
+    if invoice.balance <= 0:
+        invoice.balance=0
+        invoice.status = True
+    invoice.date_modified = datetime.now()
+    invoice.save()
+
+    return redirect('pendingBills')
 
 @login_required(login_url='/login/')
 def report(request, template_name='app/billReport.html'):

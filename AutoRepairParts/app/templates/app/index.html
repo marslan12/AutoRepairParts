@@ -71,6 +71,8 @@
             </div>
         </div>
 
+            {{monthlySale}}
+
         <!-- Area Chart Example-->
         <div class="row">
             <div class="col-lg-8">
@@ -103,6 +105,7 @@
 <!-- Chart scripts for all page-->
 <script src="{% static 'app/vendor/chart.js/Chart.min.js' %}"></script>
 <script>
+    //console.log('monthlySale ' + {{monthlySale}});
     Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#292b2c';
 
